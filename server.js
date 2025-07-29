@@ -11,12 +11,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database configuration
+// Database configuration
 const dbConfig = {
   host: 'mainline.proxy.rlwy.net',
   user: 'root',
   password: 'vrtYFNvqJZwcvZKPHHaLosYHAwgryAFf',
   database: 'railway',
-  connectionLimit: 10,
+  port: 16440, // ✅ ADD THIS LINE
+  connectionLimit: 100,
 };
 
 const pool = mysql.createPool(dbConfig);
