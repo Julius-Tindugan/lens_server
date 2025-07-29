@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database configuration
 const dbConfig = {
-  host: 'sqlfreedb.tech',
-  user: 'freedb_lenshine',
-  password: '*BFUa3R2*V5H?pm',
-  database: 'freedb_lens_db',
+  host: 'mainline.proxy.rlwy.net',
+  user: 'root',
+  password: 'vrtYFNvqJZwcvZKPHHaLosYHAwgryAFf',
+  database: 'lens_db',
   connectionLimit: 10,
 };
 
