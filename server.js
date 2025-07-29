@@ -11,13 +11,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database configuration
-// Database configuration
 const dbConfig = {
   host: 'mainline.proxy.rlwy.net',
   user: 'root',
   password: 'vrtYFNvqJZwcvZKPHHaLosYHAwgryAFf',
   database: 'railway',
-  port: 16440, // ✅ ADD THIS LINE
+  port: 16440, 
   connectionLimit: 100,
 };
 
@@ -372,7 +371,7 @@ app.post('/book', async (req, res) => {
   }
 
   // FIXED: Handle date format conversion properly
-let formattedDate;
+  let formattedDate;
   try {
     // Explicitly parse the incoming 'MM/DD/YYYY' format from the Flutter app
     if (moment(booking_date, 'MM/DD/YYYY', true).isValid()) {
@@ -394,7 +393,7 @@ let formattedDate;
   let conn;
   try {
     conn = await getConnection();
-    await conn.beginTransaction();
+    await conn.beginTransaction(); 
     // Validate user exists
     const [users] = await conn.execute('SELECT user_id FROM users WHERE user_id = ?', [user_id]);
     if (users.length === 0) {
@@ -444,8 +443,8 @@ let formattedDate;
 
     // Insert booking
     const [result] = await conn.execute(
-      'INSERT INTO bookings (user_id, package_id, booking_label, booking_date, booking_time, backdrop, total_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [user_id, package_id, booking_label.trim(), formattedDate, booking_time, backdrop?.trim() || null, totalAmount.toFixed(2), 'pending']
+      'INSERT INTO bookings (user_id, package_id, booking_label, booking_date, booking_time, backdrop, status, created_at, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)',
+      [user_id, package_id, booking_label.trim(), formattedDate, booking_time, backdrop?.trim() || null, 'pending', totalAmount.toFixed(2)]
     );
     const booking_id = result.insertId;
 
@@ -1444,7 +1443,7 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server is running on http://0.0.0.0:${PORT}`);
   console.log(`📱 Accessible from your network at http://192.168.197.12:${PORT}`);
