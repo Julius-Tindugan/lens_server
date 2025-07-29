@@ -15,7 +15,7 @@ const dbConfig = {
   host: 'mainline.proxy.rlwy.net',
   user: 'root',
   password: 'vrtYFNvqJZwcvZKPHHaLosYHAwgryAFf',
-  database: 'lens_db',
+  database: 'railway',
   connectionLimit: 10,
 };
 
