@@ -442,9 +442,11 @@ app.post('/book', async (req, res) => {
     }
 
     // Insert booking
+    const formattedTime = moment(booking_time, ["h:mm a"]).format("HH:mm:ss");
     const [result] = await conn.execute(
       'INSERT INTO bookings (user_id, package_id, booking_label, booking_date, booking_time, backdrop, status, created_at, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)',
-      [user_id, package_id, booking_label.trim(), formattedDate, booking_time, backdrop?.trim() || null, 'pending', totalAmount.toFixed(2)]
+      
+      [user_id, package_id, booking_label.trim(), formattedDate, formattedTime, backdrop?.trim() || null, 'pending', totalAmount.toFixed(2)]
     );
     const booking_id = result.insertId;
 
