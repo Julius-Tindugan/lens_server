@@ -372,31 +372,28 @@ app.post('/book', async (req, res) => {
   }
 
   // FIXED: Handle date format conversion properly
-  let formattedDate;
+let formattedDate;
   try {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(booking_date)) {
+    // Explicitly parse the incoming 'MM/DD/YYYY' format from the Flutter app
+    if (moment(booking_date, 'MM/DD/YYYY', true).isValid()) {
+      formattedDate = moment(booking_date, 'MM/DD/YYYY').format('YYYY-MM-DD');
+    } else if (moment(booking_date, 'YYYY-MM-DD', true).isValid()) {
+      // Also handle cases where the date might already be in the correct format
       formattedDate = booking_date;
     } else {
-      const dateParts = booking_date.split('/');
-      if (dateParts.length === 3) {
-        const month = dateParts[0].padStart(2, '0');
-        const day = dateParts[1].padStart(2, '0');
-        const year = dateParts[2];
-        formattedDate = `${year}-${month}-${day}`;
-      }
+      throw new Error('Invalid date format. Expected MM/DD/YYYY.');
     }
   } catch (error) {
     return res.status(400).json({ 
       success: false, 
       error: 'Invalid booking_date format',
-      details: ['Date format conversion failed']
+      details: [error.message]
     });
   }
 
   let conn;
   try {
     conn = await getConnection();
-    await conn.beginTransaction();
 
     // Validate user exists
     const [users] = await conn.execute('SELECT user_id FROM users WHERE user_id = ?', [user_id]);
