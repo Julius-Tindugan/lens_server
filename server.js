@@ -394,7 +394,7 @@ let formattedDate;
   let conn;
   try {
     conn = await getConnection();
-
+    await conn.beginTransaction();
     // Validate user exists
     const [users] = await conn.execute('SELECT user_id FROM users WHERE user_id = ?', [user_id]);
     if (users.length === 0) {
